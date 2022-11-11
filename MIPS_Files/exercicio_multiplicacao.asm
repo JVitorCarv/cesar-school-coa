@@ -1,6 +1,9 @@
 .data
 	newline: .asciiz "\n"
 	bug: .asciiz "Bug\n"
+	insertMultiplicand: .asciiz "Insert multiplicand: "
+	insertMultiplier: .asciiz "Insert multiplier: "
+	printResult: .asciiz "Result: "
 .text
         main:
                 # Start $t1 as 32
@@ -9,9 +12,25 @@
                 # Start $t2 counter as zero
                 addi    $t2, $t2, 0
                 
-                # Start $t3 as 6 and $t4 with 3
-                addi	$t3, $zero, 10 # Multiplicand
-                addi	$t4, $zero, 33 # Multiplier
+                # Print insert multiplicand
+                li	$v0, 4
+                la	$a0, insertMultiplicand
+                syscall
+                
+                # Retrieve multiplicand
+                li	$v0, 5
+                syscall
+                move	$t3, $v0
+                
+                # Print insert multiplier
+                li	$v0, 4
+                la	$a0, insertMultiplier
+                syscall
+                
+                # Retrieve multiplier
+                li	$v0, 5
+                syscall
+                move	$t4, $v0
                 
           	# Start $t5 as 1
           	addi	$t5, $zero, 1
@@ -22,6 +41,10 @@
                         blt      $t2, $t1, multiply
                         
                	# Print total
+               	li	$v0, 4
+               	la	$a0, printResult
+               	syscall
+               	
                	li	$v0, 1
                	move	$a0, $t7
                	syscall
