@@ -1,14 +1,31 @@
 .data
 	newline: .asciiz "\n"
 	bug: .asciiz "Debug Print\n"
+	informRemainder: .asciiz "Inform number to be divided: "
+	informDivisor: .asciiz "Inform divisor: "
+	printResult: .asciiz "Result: "
 .text
         main:
                 # Start counters for for
                 addi	$t1, $t1, 33
                 addi    $t2, $t2, 0
                 
-                addi	$t3, $zero, 11 	# Remainder
-                addi	$t4, $zero, 2 	# Divisor
+                # Get remainder from user
+                li	$v0, 4
+                la	$a0, informRemainder
+                syscall
+                li	$v0, 5
+                syscall
+                move	$t3, $v0
+                
+                # Get divisor from user
+                li	$v0, 4
+                la	$a0, informDivisor
+                syscall
+                li	$v0, 5
+                syscall
+                move	$t4, $v0
+                
                 sll	$t4, $t4, 16	# Initialize half of least significative bits as zero
                 addi	$t8, $zero, 0	# Quotient
 
@@ -17,6 +34,9 @@
                         blt      $t2, $t1, divide
                         
                	# Print Quotient
+               	li	$v0, 4
+               	la	$a0, printResult
+               	syscall
                	li	$v0, 1
                	move	$a0, $t8
                	syscall
